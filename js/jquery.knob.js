@@ -79,6 +79,7 @@
         this.relativeWidth = false;
         this.relativeHeight = false;
         this.$div = null; // component div
+        this.$title = null; // title element
 
         this.run = function () {
             var cf = function (e, conf) {
@@ -120,7 +121,8 @@
                     inline: false,
                     step: this.$.data('step') || 1,
                     rotation: this.$.data('rotation'),
-
+                    title: this.$.data('title') || '',
+                    
                     // Hooks
                     draw: null, // function () {}
                     change: null, // function (value) {}
@@ -178,7 +180,6 @@
                 );
 
             }
-
             !this.o.displayInput && this.$.hide();
 
             // adds needed DOM elements (canvas, div)
@@ -193,8 +194,11 @@
                 + (this.o.inline ? 'display:inline;' : '')
                 + 'width:' + this.o.width + 'px;height:' + this.o.height + 'px;'
                 + '"></div>');
-
             this.$.wrap(this.$div).before(this.$c);
+            if (this.o.title) {
+                this.$title = $('<span class="knob-title">' + this.o.title + '</span>');
+                this.$c.after(this.$title);
+            }
             this.$div = this.$.parent();
 
             if (typeof G_vmlCanvasManager !== 'undefined') {
@@ -703,26 +707,56 @@
                 String(Math.abs(this.o.min)).length,
                 2
             ) + 2;
-
-            this.o.displayInput
-                && this.i.css({
-                        'width' : ((this.w / 2 + 4) >> 0) + 'px',
+            
+            var style;
+        if (this.o.displayInput) {
+                style = {
+                    'position' : 'absolute',
+                    'vertical-align' : 'middle',
+                    /*'margin-top' : ((this.w / 3) >> 0) + 'px',*/
+                    'margin-left' : '-' + ((this.w * 3 / 4 + 2) >> 0) + 'px',
+                    'border' : 0,
+                    'background' : 'none',
+                    'text-align' : 'center',
+                    'padding' : '0px',
+                    '-webkit-appearance': 'none'
+                };
+                if (this.o.title) {
+                    style = $.extend(style, {
+                        'width' : ((this.w / 2 + 6) >> 0) + 'px',
                         'height' : ((this.w / 3) >> 0) + 'px',
-                        'position' : 'absolute',
-                        'vertical-align' : 'middle',
-                        'margin-top' : ((this.w / 3) >> 0) + 'px',
-                        'margin-left' : '-' + ((this.w * 3 / 4 + 2) >> 0) + 'px',
-                        'border' : 0,
-                        'background' : 'none',
+                        'margin-top' : ((this.w / 2.5) >> 0) + 'px',
                         'font' : this.o.fontWeight + ' ' + ((this.w / s) >> 0) + 'px ' + this.o.font,
-                        'text-align' : 'center',
+                    });
+                } else {
+                    style = $.extend(style, {
+                        'width' : ((this.w / 2 + 6) >> 0) + 'px',
+                        'height' : ((this.w / 3) >> 0) + 'px',
+                        'margin-top' : ((this.w / 3) >> 0) + 'px',
+                        'font' : this.o.fontWeight + ' ' + ((this.w / s) >> 0) + 'px ' + this.o.font,
                         'color' : this.o.inputColor || this.o.fgColor,
-                        'padding' : '0px',
-                        '-webkit-appearance': 'none'
-                        }) || this.i.css({
-                            'width': '0px',
-                            'visibility': 'hidden'
-                        });
+                    });
+                }
+            } else {
+                style = {
+                    'width': '0px',
+                    'visibility': 'hidden'
+                };
+            }
+            this.i.css(style)
+            if (this.o.title) {
+                style = $.extend(style, {
+                    'width' : ((this.w / 2 + 4) >> 0) + 'px',
+                    'height' : ((this.w / 4) >> 0) + 'px',
+                    'margin-top' : ((this.w / 3.8) >> 0) + 'px',
+                    'margin-left' : '-' + ((this.w * 3 / 4 + 2) >> 0) + 'px',
+                    'font' : this.o.fontWeight + ' ' + ((this.w / 7) >> 0) + 'px ' + this.o.font,
+                    'overflow': 'hidden',
+                    'color' : 'inherrit'
+                });
+                this.$title.css(style);
+                
+            }
         };
 
         this.change = function (v) {

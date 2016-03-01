@@ -122,7 +122,7 @@
                     step: this.$.data('step') || 1,
                     rotation: this.$.data('rotation'),
                     title: this.$.data('title') || '',
-
+                    
                     // Hooks
                     draw: null, // function () {}
                     change: null, // function (value) {}
@@ -707,7 +707,7 @@
                 String(Math.abs(this.o.min)).length,
                 2
             ) + 2;
-
+            
             var style;
         if (this.o.displayInput) {
                 style = {
@@ -755,7 +755,7 @@
                     'color' : 'inherrit'
                 });
                 this.$title.css(style);
-
+                
             }
         };
 
@@ -799,16 +799,10 @@
             c.lineCap = this.lineCap;
 
             if (this.o.bgColor !== "none") {
-                if (this.o.bgAlpha !== undefined) {
-                    c.globalAlpha = this.o.bgApha;
-                }
                 c.beginPath();
                     c.strokeStyle = this.o.bgColor;
                     c.arc(this.xy, this.xy, this.radius, this.endAngle - 0.00001, this.startAngle + 0.00001, true);
                 c.stroke();
-                if (this.o.bgAlpha !== undefined) {
-                    c.globalAlpha = 1;
-                }
             }
 
             if (this.o.displayPrevious) {

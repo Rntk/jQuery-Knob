@@ -122,7 +122,7 @@
                     step: this.$.data('step') || 1,
                     rotation: this.$.data('rotation'),
                     title: this.$.data('title') || '',
-                    
+
                     // Hooks
                     draw: null, // function () {}
                     change: null, // function (value) {}
@@ -707,7 +707,7 @@
                 String(Math.abs(this.o.min)).length,
                 2
             ) + 2;
-            
+
             var style;
         if (this.o.displayInput) {
                 style = {
@@ -755,7 +755,7 @@
                     'color' : 'inherrit'
                 });
                 this.$title.css(style);
-                
+
             }
         };
 
@@ -799,9 +799,17 @@
             c.lineCap = this.lineCap;
 
             if (this.o.bgColor !== "none") {
+                if (this.o.ringColor !== undefined) {
+                    c.beginPath();
+                        c.lineWidth = (this.o.ringWidth)? this.o.ringWidth: 1;
+                        c.strokeStyle = this.o.ringColor;
+                        c.arc(this.xy, this.xy, this.radius, this.endAngle - 0.00001, this.startAngle + 0.00001, true);
+                    c.stroke();
+                    c.lineWidth = this.lineWidth;
+                }
                 c.beginPath();
                     c.strokeStyle = this.o.bgColor;
-                    c.arc(this.xy, this.xy, this.radius, this.endAngle - 0.00001, this.startAngle + 0.00001, true);
+                    c.arc(this.xy, this.xy, this.radius - +this.o.ringDelta, this.endAngle - 0.00001, this.startAngle + 0.00001, true);
                 c.stroke();
             }
 
@@ -816,7 +824,7 @@
 
             c.beginPath();
             c.strokeStyle = r ? this.o.fgColor : this.fgColor ;
-            c.arc(this.xy, this.xy, this.radius, a.s, a.e, a.d);
+            c.arc(this.xy, this.xy, this.radius - +this.o.ringDelta, a.s, a.e, a.d);
             c.stroke();
         };
 
